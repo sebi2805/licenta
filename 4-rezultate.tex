@@ -1,0 +1,59 @@
+\chapter{Rezultate}
+\section{Metodele de evaluare utilizate}
+Pentru evaluarea performanței, utilizăm două metrici:  
+
+\begin{itemize}
+    \item \textbf{RMSE} (Root Mean Square Error) – utilizată pentru a evalua eroarea poziției centrului mingii.
+    \begin{equation}\label{eq:rmse}
+        \text{RMSE($\hat{\mathbf{p}}$, ${\mathbf{p}}$)} = \sqrt{\frac{1}{N}\sum_{i=1}^{N} \left\| \hat{\mathbf{p}}_i - \mathbf{p}_i \right\|^{2}}
+    \end{equation}
+    \item \textbf{PCE} (Percentage of Correct Events) – metrică utilizată de OSAI, definită în literatura de specialitate\cite{McNally_2019_CVPR_Workshops}. Reprezintă procentul de evenimente prezise corect, fiind permisă o toleranță de $\delta = 0.05$ secunde, ceea ce corespunde unui număr de 6 cadre acceptate. Pentru fiecare dintre cele \( N \) evenimente reale, măsoară dacă timestamp-ul prezis \( \hat{t}_i \) 
+    se află în interiorul unei toleranțe \( \delta \) față de timestamp-ul real \( t_i \). 
+    Dacă da, evenimentul e considerat corect detectat.
+
+\begin{equation}\label{eq:pce}
+    \text{PCE}(\hat{\mathbf t}, \mathbf t, \boldsymbol\delta)
+    = \frac{100}{N}
+    \sum_{i=1}^{N}
+    \Bigl(
+      \min_{1 \le j \le N} \bigl|\hat t_j - t_i\bigr|
+      \le \delta
+    \Bigr)
+\end{equation}
+
+\end{itemize}
+
+
+
+\section{Rezultate experimentale}
+
+\begin{table}[H]
+  \centering
+  \caption{Rezultate pe baza de date TTNet}
+  \label{tab:ttnet}
+  \begin{tabular}{lcc}
+    \toprule
+    \textbf{Metodă} & \textbf{RMSE (px)} & \textbf{PCE (\%)} \\
+    \midrule
+    FMI-TT & 1.13 & 93.5 \\
+    TTNet       & 1.97 & 97.7 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Rezultate pe baza de date FMI-TT}
+  \label{tab:fmit2}
+  \begin{tabular}{lcc}
+    \toprule
+    \textbf{Metodă} & \textbf{RMSE (px)} & \textbf{PCE (\%)} \\
+    \midrule
+    FMI-TT & 1.31 & 91.5 \\
+    TTNet        & 5.24 & 86.5 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+În urma acestor teste, putem observa cum metoda propusă prezintă rezultate mai bune pentru ambele baze de date. Mai mult decât atât, metoda TTNet pare că nu generalizează la fel de bine pe baza de date FMI-TT, o posibilă explicație fiind utilizarea rețelor neuronale pentru detecția tuturor componentelor, astfel încât sunt mai multe ponderi care trebuie actualizate la scenarii noi.
